@@ -159,11 +159,16 @@ Investigar o impacto de *code reviews* na redução de vulnerabilidades e *code 
 | Vulnerabilidades após o *merge* | Quantidade de vulnerabilidades detectadas no código após o *merge* do pull request | Número inteiro | SonarQube |
 | *Code smells* antes do *merge* | Quantidade de *code smells* detectados no código antes do *merge* do pull request | Número inteiro | SonarQube |
 | *Code smells* após o *merge* | Quantidade de *code smells* detectados no código após o *merge* do pull request | Número inteiro | SonarQube |
+| Redução percentual de vulnerabilidades | ((Vulnerabilidades antes - Vulnerabilidades depois) / Vulnerabilidades antes) × 100 | Percentual | Calculada |
+| Redução percentual de *code smells* | ((*Code smells* antes - *Code smells* depois) / *Code smells* antes) × 100 | Percentual | Calculada |
+| Redução combinada (vulnerabilidades + *code smells*) | Soma das reduções absolutas de vulnerabilidades e *code smells* | Número inteiro | Calculada |
 | Tempo até o *merge* | Tempo decorrido desde a abertura do pull request até o *merge* | Horas/Dias | API GraphQL do GitHub |
 | Quantidade de interações no pull request | Número total de comentários, aprovações e alterações no pull request | Número inteiro | API GraphQL do GitHub |
 | Quantidade de *code reviews* | Número de *code reviews* realizados em um pull request | Número inteiro | API GraphQL do GitHub |
 | Severidade das vulnerabilidades | Classificação da severidade das vulnerabilidades (Crítica, Alta, Média, Baixa) | Categórica | SonarQube |
 | Severidade dos *code smells* | Classificação da severidade dos *code smells* (Bloqueador, Crítica, Maior, Menor, Info) | Categórica | SonarQube |
+| Tipos de *code smells* corrigidos | Frequência de correção por tipo de *code smell* | Categórica | SonarQube |
+| Tamanho do *pull request* | Número de linhas modificadas no *pull request* | Número inteiro | API GraphQL do GitHub |
 | Linguagem de programação | Linguagem de programação principal do repositório | Categórica | API GraphQL do GitHub |
 
 ### Associação de Métricas às Questões
@@ -174,17 +179,17 @@ Investigar o impacto de *code reviews* na redução de vulnerabilidades e *code 
 | Q1.2 | Padrões mais comuns de *code reviews* | Quantidade de *code reviews*, Quantidade de interações no pull request e Tempo até o *merge* |
 | Q1.3 | Distribuição temporal dos *code reviews* | Tempo até o merge e Quantidade de *code reviews* |
 | Q2.1 | Quantidade média de vulnerabilidades antes | Vulnerabilidades antes do *merge* (média), Linguagem de programação e Severidade das vulnerabilidades |
-| Q2.2 | Redução percentual de vulnerabilidades | Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge* e Quantidade de *code reviews* |
-| Q2.3 | Diferenças na redução de vulnerabilidades | Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, Quantidade de *code reviews* e Severidade das vulnerabilidades |
+| Q2.2 | Redução percentual de vulnerabilidades | Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, Redução percentual de vulnerabilidades e Quantidade de *code reviews* |
+| Q2.3 | Diferenças na redução de vulnerabilidades | Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, Redução percentual de vulnerabilidades, Quantidade de *code reviews* e Severidade das vulnerabilidades |
 | Q3.1 | Quantidade média de *code smells* antes | *Code smells* antes do *merge* (média), Linguagem de programação e Severidade dos *code smells* |
-| Q3.2 | Redução percentual de *code smells* | *Code smells* antes do *merge*, *Code smells* após o *merge* e Quantidade de *code reviews* |
-| Q3.3 | Tipos de *code smells* mais corrigidos | *Code smells* antes do *merge*, *Code smells* após o *merge*, Severidade dos *code smells* e Quantidade de *code reviews* |
-| Q4.1 | Impacto quantitativo combinado | Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, *Code smells* antes do *merge*, *Code smells* após o *merge* e Quantidade de *code reviews* |
-| Q4.2 | Relação estatisticamente significativa | Quantidade de *code reviews*, Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, *Code smells* antes do *merge* e *Code smells* após o *merge* |
-| Q4.3 | Eficácia relativa | Quantidade de *code reviews* × Vulnerabilidades (redução), Quantidade de *code reviews* × *Code smells* (redução), Severidade das vulnerabilidade e Severidade dos *code smells* |
-| Q4.4 | Diferenças no impacto por linguagem | Linguagem de programação, Quantidade de *code reviews*, Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, *Code smells* antes do *merge* e *Code smells* após o *merge* |
-| Q4.5 | Correlação linguagem × *code reviews* × vulnerabilidades | Linguagem de programação, Quantidade de *code reviews*, Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge* e Severidade das vulnerabilidades |
-| Q4.6 | Correlação linguagem × *code reviews* × *code smells* | Linguagem de programação, Quantidade de *code reviews*, *Code smells* antes do *merge*, *Code smells* após o *merge* e Severidade dos *code smells* |
+| Q3.2 | Redução percentual de *code smells* | *Code smells* antes do *merge*, *Code smells* após o *merge*, Redução percentual de *code smells* e Quantidade de *code reviews* |
+| Q3.3 | Tipos de *code smells* mais corrigidos | *Code smells* antes do *merge*, *Code smells* após o *merge*, Tipos de *code smells* corrigidos, Severidade dos *code smells* e Quantidade de *code reviews* |
+| Q4.1 | Impacto quantitativo combinado | Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, *Code smells* antes do *merge*, *Code smells* após o *merge*, Redução combinada (vulnerabilidades + *code smells*) e Quantidade de *code reviews* |
+| Q4.2 | Relação estatisticamente significativa | Quantidade de *code reviews*, Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, *Code smells* antes do *merge*, *Code smells* após o *merge*, Redução percentual de vulnerabilidades e Redução percentual de *code smells* |
+| Q4.3 | Eficácia relativa | Quantidade de *code reviews*, Redução percentual de vulnerabilidades, Redução percentual de *code smells*, Severidade das vulnerabilidades e Severidade dos *code smells* |
+| Q4.4 | Diferenças no impacto por linguagem | Linguagem de programação, Quantidade de *code reviews*, Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, *Code smells* antes do *merge*, *Code smells* após o *merge*, Redução percentual de vulnerabilidades e Redução percentual de *code smells* |
+| Q4.5 | Correlação linguagem × *code reviews* × vulnerabilidades | Linguagem de programação, Quantidade de *code reviews*, Vulnerabilidades antes do *merge*, Vulnerabilidades após o *merge*, Redução percentual de vulnerabilidades e Severidade das vulnerabilidades |
+| Q4.6 | Correlação linguagem × *code reviews* × *code smells* | Linguagem de programação, Quantidade de *code reviews*, *Code smells* antes do *merge*, *Code smells* após o *merge*, Redução percentual de *code smells* e Severidade dos *code smells* |
 
 # 4. Escopo e contexto do experimento
 
@@ -582,6 +587,50 @@ Fatores que podem influenciar tanto a quantidade de *code reviews* quanto a redu
 - **Análise de subgrupos**: Verificar se efeitos são consistentes em diferentes subgrupos
 - **Análise de sensibilidade**: Testar robustez dos resultados considerando diferentes suposições sobre variáveis de confusão
 - **Reconhecimento de limitações**: Discussão explícita de variáveis de confusão não controladas e suas implicações
+
+## 8.8 Tabela consolidada de variáveis
+
+| Variável | Tipo | Descrição | Unidade/Tipo de Dado | Fonte |
+|----------|------|-----------|---------------------|-------|
+| **Variáveis Independentes (Fatores)** |||||
+| Quantidade de *code reviews* | Independente | Número de *code reviews* realizados em um *pull request* antes do *merge* | Número inteiro (0, 1-2, 3-5, 6+) | API GraphQL do GitHub |
+| Linguagem de programação | Independente | Linguagem de programação principal do repositório | Categórica (5 linguagens) | API GraphQL do GitHub |
+| **Variáveis Dependentes (Respostas)** |||||
+| Vulnerabilidades antes do *merge* | Dependente | Quantidade de vulnerabilidades detectadas no código antes do *merge* do *pull request* | Número inteiro | SonarQube |
+| Vulnerabilidades após o *merge* | Dependente | Quantidade de vulnerabilidades detectadas no código após o *merge* do *pull request* | Número inteiro | SonarQube |
+| *Code smells* antes do *merge* | Dependente | Quantidade de *code smells* detectados no código antes do *merge* do *pull request* | Número inteiro | SonarQube |
+| *Code smells* após o *merge* | Dependente | Quantidade de *code smells* detectados no código após o *merge* do *pull request* | Número inteiro | SonarQube |
+| Redução percentual de vulnerabilidades | Dependente | ((Vulnerabilidades antes - Vulnerabilidades depois) / Vulnerabilidades antes) × 100 | Percentual | Calculada |
+| Redução percentual de *code smells* | Dependente | ((*Code smells* antes - *Code smells* depois) / *Code smells* antes) × 100 | Percentual | Calculada |
+| Redução combinada | Dependente | Soma das reduções absolutas de vulnerabilidades e *code smells* | Número inteiro | Calculada |
+| Severidade das vulnerabilidades | Dependente | Classificação da severidade das vulnerabilidades | Categórica (Crítica, Alta, Média, Baixa) | SonarQube |
+| Severidade dos *code smells* | Dependente | Classificação da severidade dos *code smells* | Categórica (Bloqueador, Crítica, Maior, Menor, Info) | SonarQube |
+| Tipos de *code smells* corrigidos | Dependente | Frequência de correção por tipo de *code smell* | Categórica | SonarQube |
+| **Variáveis de Controle** |||||
+| Tempo até o *merge* | Controle | Tempo decorrido desde a abertura do *pull request* até o *merge* | Horas/Dias | API GraphQL do GitHub |
+| Quantidade de interações no *pull request* | Controle | Número total de comentários, aprovações e alterações no *pull request* | Número inteiro | API GraphQL do GitHub |
+| Tamanho do *pull request* | Controle | Número de linhas modificadas no *pull request* | Número inteiro | API GraphQL do GitHub |
+| Período temporal | Controle | Período de criação do *pull request* para balanceamento temporal | Data/Timestamp | API GraphQL do GitHub |
+| Tamanho/complexidade do repositório | Controle | Popularidade/tamanho do repositório | Número inteiro (estrelas, forks) | API GraphQL do GitHub |
+
+## 8.9 Tabela consolidada de fatores, tratamentos e combinações
+
+| Fator | Tipo | Níveis/Tratamentos | Descrição | Combinações Experimentais |
+|-------|------|---------------------|-----------|---------------------------|
+| **Presença e quantidade de *code reviews*** | Fator Principal | **T0 (Controle)**: 0 *code reviews* | *Pull requests* mesclados sem receber nenhum *code review* | T0 × 5 linguagens = 5 combinações |
+| | | **T1**: 1-2 *code reviews* | *Pull requests* que receberam 1 ou 2 *code reviews* antes do *merge* | T1 × 5 linguagens = 5 combinações |
+| | | **T2**: 3-5 *code reviews* | *Pull requests* que receberam entre 3 e 5 *code reviews* antes do *merge* | T2 × 5 linguagens = 5 combinações |
+| | | **T3**: 6+ *code reviews* | *Pull requests* que receberam 6 ou mais *code reviews* antes do *merge* | T3 × 5 linguagens = 5 combinações |
+| **Linguagem de programação** | Fator Secundário | 5 linguagens mais populares do GitHub | Linguagens a serem definidas na coleta (ex: JavaScript, Python, Java, etc.) | 4 tratamentos × 5 linguagens = 20 combinações |
+| **Tempo até o *merge*** | Fator de Controle | Variável contínua | Tempo decorrido desde a abertura até o *merge* (usado para balanceamento) | Controlado estatisticamente |
+| **Quantidade de interações** | Fator de Controle | Variável contínua | Número total de comentários, aprovações e alterações (usado como covariável) | Controlado estatisticamente |
+| **Tamanho do *pull request*** | Fator de Controle | Variável contínua | Número de linhas modificadas (usado como covariável) | Controlado estatisticamente |
+
+**Total de combinações experimentais:** 20 combinações (4 tratamentos × 5 linguagens)
+
+**Distribuição planejada:**
+- 250 *pull requests* por combinação (tratamento × linguagem)
+- Total: 5.000 *pull requests* (20 combinações × 250 PRs)
 
 # 9. Desenho experimental
 

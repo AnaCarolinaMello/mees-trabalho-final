@@ -1103,7 +1103,102 @@ O piloto será considerado bem-sucedido se:
 
 **Correção para múltiplas comparações:** Quando aplicável, usar correção de Bonferroni ou FDR (*False Discovery Rate*)
 
-## 12.3 Tratamento de dados faltantes e outliers
+## 12.2.1 Fluxograma do experimento
+
+O fluxograma abaixo apresenta o passo a passo operacional do experimento, incluindo instrumentos, variáveis, métricas e stakeholders envolvidos em cada fase:
+
+```mermaid
+flowchart TD
+    Start([Início do Experimento]) --> Fase1[Fase 1: Identificação de Linguagens]
+    
+    Fase1 --> F1_1[Consultar API GitHub<br/>Instrumento: API GraphQL GitHub<br/>]
+    F1_1 --> F1_2[Validar disponibilidade<br/>Critérios: PRs, code reviews, SonarQube]
+    F1_2 --> F1_3[Selecionar 5 linguagens<br/>Variável: Linguagem de programação]
+    F1_3 --> F1_4[Documentar seleção]
+    F1_4 --> Fase2[Fase 2: Mineração de <i>Pull Requests</i>]
+    
+    Fase2 --> F2_1[Identificar 500 repos/linguagem<br/>Instrumento: API GraphQL GitHub<br/>Métrica: Estrelas, forks, atividade]
+    F2_1 --> F2_2[Filtrar repositórios<br/>Critérios: Públicos, ativos, histórico]
+    F2_2 --> F2_3[Extrair PRs mesclados<br/>Instrumento: Scripts Python<br/>Variável: <i>Pull requests</i>]
+    F2_3 --> F2_4[Categorizar PRs<br/>Variável: Quantidade de code reviews<br/>Grupos: T0, T1, T2, T3]
+    F2_4 --> F2_5[Seleção aleatória<br/>250 PRs por grupo/linguagem<br/>Total: 5.000 PRs]
+    F2_5 --> F2_6[Validar amostra<br/>Métrica: Tamanho da amostra]
+    F2_6 --> Fase3[Fase 3: Extração de Dados]
+    
+    Fase3 --> F3_1[Extrair metadados dos PRs<br/>Instrumento: Scripts Python<br/>Variáveis: <i>Timestamps</i>, <i>code reviews</i>,<br/>interações, tempo até <i>merge</i>, linguagem]
+    F3_1 --> F3_2[Identificar <i>commits</i> relevantes<br/>Antes e após <i>merge</i>]
+    F3_2 --> F3_3[Extrair <i>snapshots</i> do código<br/>Instrumento: Git<br/>Variável: Versões do código]
+    F3_3 --> Fase4[Fase 4: Tratamento de PRs]
+    
+    Fase4 --> F4_1[Validar completude<br/>Critério: Dados completos]
+    F4_1 --> F4_2[Filtrar dados inválidos<br/>Remover PRs incompletos]
+    F4_2 --> F4_3[Balancear amostra<br/>Métrica: Proporções por grupo/linguagem]
+    F4_3 --> F4_4[Organizar dados tabulares<br/>Formato: Estrutura para processamento]
+    F4_4 --> Fase5[Fase 5: Análise Estática]
+    
+    Fase5 --> F5_1[Configurar SonarQube<br/>Instrumento: SonarQube<br/>S]
+    F5_1 --> F5_2[Analisar código antes do <i>merge</i><br/>Instrumento: SonarQube<br/>Métricas: Vulnerabilidades antes,<br/><i>Code smells</i> antes, Severidade]
+    F5_2 --> F5_3[Analisar código após do merge<br/>Instrumento: SonarQube<br/>Métricas: Vulnerabilidades depois,<br/><i>Code smells</i> depois, Severidade]
+    F5_3 --> F5_4[Processar resultados<br/>Consolidar: SonarQube + Metadados PRs]
+    F5_4 --> Fase6[Fase 6: Geração de CSVs]
+    
+    Fase6 --> F6_1[Calcular métricas derivadas<br/>Instrumento: Scripts Python<br/>Métricas: Redução % vulnerabilidades,<br/>Redução % code smells,<br/>Correlações]
+    F6_1 --> F6_2[Gerar arquivos CSV<br/>CSV principal, por linguagem,<br/>por grupo]
+    F6_2 --> F6_3[Validar qualidade dos dados<br/>Critérios: Consistência, completude]
+    F6_3 --> Fase7[Fase 7: Análise e Visualização]
+    
+    Fase7 --> F7_1[Importar dados no Power BI<br/>Instrumento: Power BI<br/>Stakeholder: Pesquisadora]
+    F7_1 --> F7_2[Criar modelo de dados<br/>Relações entre tabelas, medidas]
+    F7_2 --> F7_3[Desenvolver visualizações<br/>Dashboards comparativos,<br/>Gráficos de redução %,<br/>Análises por linguagem]
+    F7_3 --> F7_4[Análise exploratória<br/>Identificar padrões]
+    F7_4 --> F7_5[Documentar descobertas]
+    F7_5 --> Fase8[Fase 8: Encerramento]
+    
+    Fase8 --> F8_1[Arquivar dados brutos<br/>Dados originais e processados]
+    F8_1 --> F8_2[Documentar processo<br/>Desvios, problemas, soluções]
+    F8_2 --> F8_3[Preparar dados para análise<br/>Formato: Estatística]
+    F8_3 --> Analise[Análise Estatística<br/>Instrumento: Testes estatísticos<br/>Métricas: Testes t, ANOVA,<br/>Correlações, Regressão]
+    Analise --> End([Fim do Experimento])
+    
+    style Start fill:#e1f5ff
+    style End fill:#e1f5ff
+    style Fase1 fill:#fff4e1
+    style Fase2 fill:#fff4e1
+    style Fase3 fill:#fff4e1
+    style Fase4 fill:#fff4e1
+    style Fase5 fill:#fff4e1
+    style Fase6 fill:#fff4e1
+    style Fase7 fill:#fff4e1
+    style Fase8 fill:#fff4e1
+    style Analise fill:#e8f5e9
+```
+
+**Legenda do fluxograma:**
+
+- **Instrumentos principais:**
+  - API GraphQL do GitHub: Extração de dados de repositórios e *pull requests*
+  - Scripts Python: Automação de coleta, processamento e análise
+  - SonarQube: Análise estática de código (vulnerabilidades e *code smells*)
+  - Power BI: Visualização e análise exploratória
+  - Git: Extração de snapshots do código
+
+- **Variáveis principais:**
+  - **Independente**: Quantidade de *code reviews* (T0, T1, T2, T3)
+  - **Dependentes**: Vulnerabilidades antes/depois e *Code smells* antes/depois
+  - **Controle**: Linguagem de programação, Tempo até *merge*, Interações e Tamanho do PR
+
+- **Métricas calculadas:**
+  - Redução percentual de vulnerabilidades
+  - Redução percentual de *code smells*
+  - Redução combinada (vulnerabilidades + *code smells*)
+  - Correlações entre variáveis
+  - Estatísticas descritivas (média, mediana, desvio padrão)
+
+- **Stakeholders:**
+  - **Pesquisadora**: Execução de todas as fases operacionais
+  - **Orientador**: Supervisão acadêmica e revisão (não operacional)
+
+## 12.3 Tratamento de dados faltantes e *outliers*
 
 ### Tratamento de dados faltantes
 
@@ -1149,39 +1244,23 @@ O piloto será considerado bem-sucedido se:
 **Ameaças identificadas:**
 
 1. **Baixo poder estatístico**:
-   - **Ameaça**: Amostra insuficiente pode não detectar efeitos reais (erro tipo II)
+   - **Ameaça**: Amostra insuficiente pode não detectar efeitos reais (erro tipo 2)
    - **Mitigação**: 
      - Tamanho de amostra planejado (5.000 PRs) calculado para poder ≥ 0,8
      - Critério de sucesso: poder estatístico ≥ 0,8
 
 2. **Violação de suposições estatísticas**:
-   - **Ameaça**: Dados não normais, heterocedasticidade e violação de independência
+   - **Ameaça**: Suposições dos testes estatísticos podem não ser atendidas, comprometendo validade dos resultados
    - **Mitigação**:
-     - Verificação de normalidade (teste de Shapiro-Wilk, Q-Q plots)
-     - Uso de testes não paramétricos quando suposições não forem atendidas
-     - Transformações de dados se necessário (log e raiz quadrada)
-     - Verificação de suposições de modelos de regressão (análise de resíduos)
+     - Verificação de suposições (normalidade, homocedasticidade, independência)
+     - Uso de testes não paramétricos quando necessário
 
-3. **Erros de medida**:
+3. **Erros de medida (SonarQube, API)**:
    - **Ameaça**: SonarQube pode ter falsos positivos/negativos e API do GitHub pode ter dados incompletos
    - **Mitigação**:
      - Verificar consistência dos dados SonarQube em amostra piloto
      - Verificação de completude dos dados da API antes da análise
-     - Documentação de limitações conhecidas do SonarQube por linguagem
      - Análise de sensibilidade considerando possíveis erros de medida
-
-4. **Múltiplas comparações**:
-   - **Ameaça**: Aumento da taxa de erro tipo I ao testar múltiplas hipóteses
-   - **Mitigação**:
-     - Correção de Bonferroni ou FDR (*False Discovery Rate*) quando apropriado
-     - Planejamento prévio das comparações principais vs. exploratórias
-
-5. **Dados faltantes e outliers**:
-   - **Ameaça**: Perda de poder ou viés se tratamento inadequado
-   - **Mitigação**:
-     - Regras pré-definidas para tratamento (seção 12.3)
-     - Análise de sensibilidade com diferentes abordagens
-     - Documentação de todas as exclusões
 
 ## 13.2 Validade interna
 
@@ -1191,35 +1270,16 @@ O piloto será considerado bem-sucedido se:
    - **Ameaça**: Diferenças sistemáticas entre grupos (com vs. sem *code reviews*) podem explicar resultados, não os *code reviews* em si
    - **Mitigação**:
      - Balanceamento por linguagem, tamanho de repositório e período temporal
-     - Análise de características basais dos grupos para verificar comparabilidade
-     - Controle estatístico por variáveis de confusão (regressão múltipla)
+     - Análise de características dos grupos para verificar comparabilidade
 
 2. **Histórico**:
    - **Ameaça**: Eventos externos (mudanças em ferramentas e práticas da comunidade) podem afetar resultados
    - **Mitigação**:
      - Distribuição de *pull requests* ao longo de diferentes períodos temporais
-     - Análise de tendências temporais para identificar possíveis efeitos de história
+     - Análise de tendências temporais para identificar possíveis efeitos de histórico
      - Controle por período temporal nas análises
 
-3. **Maturação**:
-   - **Ameaça**: Mudanças naturais ao longo do tempo (projetos melhoram naturalmente)
-   - **Mitigação**:
-     - Comparação com grupo controle (sem *code reviews*) que também sofre maturação
-     - Análise antes/depois controlada por grupo
-
-4. **Instrumentação**:
-   - **Ameaça**: Mudanças no SonarQube ou nas regras de detecção podem afetar medidas
-   - **Mitigação**:
-     - Usar versão consistente do SonarQube para todas as análises
-     - Documentar versão e regras ativadas
-
-5. **Regressão à média**:
-   - **Ameaça**: *Pull requests* com muitos problemas podem naturalmente melhorar
-   - **Mitigação**:
-     - Grupo controle permite controlar esse efeito
-     - Análise de *pull requests* com diferentes níveis iniciais de problemas
-
-6. **Variáveis de confusão**:
+3. **Variáveis de confusão**:
    - **Ameaça**: Fatores como experiência do desenvolvedor, complexidade do código e tamanho do PR podem confundir resultados
    - **Mitigação**:
      - Controle estatístico por variáveis conhecidas (linguagem, tempo até *merge* e interações)
@@ -1229,85 +1289,35 @@ O piloto será considerado bem-sucedido se:
 
 **Ameaças identificadas:**
 
-1. **Operacionalização de *code reviews***:
+1. **Quantidade vs. qualidade de *code reviews***:
    - **Ameaça**: Quantidade de *code reviews* pode não capturar qualidade ou efetividade das revisões
    - **Mitigação**:
-     - Definição clara: *code review* = comentário de revisão aprovado ou rejeitado
-     - Análise complementar considerando interações e tempo de revisão
-
-2. **Medição de vulnerabilidades**:
-   - **Ameaça**: SonarQube pode não detectar todas as vulnerabilidades ou ter falsos positivos
-   - **Mitigação**:
-     - Uso de ferramenta estabelecida e reconhecida (SonarQube)
-     - Documentação de regras ativadas e limitações conhecidas
-     - Foco em vulnerabilidades detectadas, não em vulnerabilidades reais (limitação aceita)
-     - Análise considerando severidade para priorizar vulnerabilidades mais críticas
-
-3. **Medição de *code smells***:
-   - **Ameaça**: *Code smells* são subjetivos e podem variar em importância
-   - **Mitigação**:
-     - Uso de definições padronizadas do SonarQube
-     - Análise por severidade
-     - Foco em *code smells* de maior severidade para análises principais
-
-4. **Redução de problemas**:
-   - **Ameaça**: Redução pode ser devido a outros fatores (refatoração não relacionada e mudanças de requisitos)
-   - **Mitigação**:
-     - Comparação com grupo controle (sem *code reviews*)
-     - Análise de *commits* para identificar se mudanças estão relacionadas a *code reviews*
-     - Foco em redução, não em causalidade direta (estudo observacional)
-
-5. **Ambiguidade de interpretação**:
-   - **Ameaça**: Resultados podem ser interpretados de forma incorreta
-   - **Mitigação**:
-     - Definições claras de todas as métricas e variáveis
+     - Definição clara: *code review* equivale comentário de revisão aprovado ou rejeitado
      - Documentação de limitações do estudo observacional
-     - Discussão explícita de variáveis de confusão possíveis
+     - Análises complementares considerando interações e tempo de revisão
+
+2. **SonarQube não detecta tudo**:
+   - **Ameaça**: SonarQube pode não detectar todos os problemas de código, limitando a validade do constructo de qualidade
+   - **Mitigação**:
+     - Uso de ferramenta estabelecida e amplamente utilizada
+     - Foco em vulnerabilidades detectadas pela ferramenta
+     - Análise por severidade dos problemas detectados
 
 ## 13.4 Validade externa
 
-**Contextos onde resultados podem ser generalizados:**
+**Ameaças identificadas:**
 
-1. **Repositórios públicos *open-source* do GitHub**:
-   - Resultados podem generalizar para outros repositórios públicos similares
-   - Especialmente para projetos das 5 linguagens analisadas
+1. **Limitação a repositórios públicos do GitHub**:
+   - **Limitação**: Resultados podem não generalizar para repositórios privados ou outras plataformas
+   - **Mitigação**:
+     - Documentação explícita do contexto (repositórios públicos do GitHub)
+     - Discussão de limitações e contexto de aplicabilidade
 
-2. **Projetos com práticas similares de desenvolvimento**:
-   - Projetos que usam *pull requests* e *code reviews* de forma similar
-   - Projetos com tamanho e popularidade similares aos analisados
-
-3. **Linguagens de programação estudadas**:
-   - Resultados podem generalizar para projetos nas mesmas linguagens
-   - Com cautela para outras linguagens não analisadas
-
-**Limitações à generalização:**
-
-1. **Repositórios privados**:
-   - **Limitação**: Práticas podem diferir em contextos empresariais privados
-   - **Justificativa**: Processos formais, pressões de prazo e cultura organizacional diferentes
-
-2. **Projetos de nicho ou muito pequenos**:
-   - **Limitação**: Foco em projetos populares (top 500) pode não representar projetos menores
-   - **Justificativa**: Projetos pequenos podem ter dinâmicas diferentes de *code reviews*
-
-3. **Outras linguagens de programação**:
+2. **Limitação a 5 linguagens**:
    - **Limitação**: Resultados limitados às 5 linguagens analisadas
-   - **Justificativa**: Diferentes linguagens podem ter características que afetam *code reviews* e detecção de problemas
-
-4. **Contextos com processos muito formais**:
-   - **Limitação**: Empresas com processos de revisão muito estruturados podem ter resultados diferentes
-   - **Justificativa**: *Code reviews* em contextos formais podem ter objetivos e processos diferentes
-
-5. **Projetos com tecnologias ou domínios específicos**:
-   - **Limitação**: Projetos em domínios críticos (ex: sistemas embarcados, segurança) podem ter práticas diferentes
-   - **Justificativa**: Requisitos e práticas específicas do domínio podem influenciar resultados
-
-**Estratégias para aumentar validade externa:**
-
-- Análise separada por linguagem para identificar padrões específicos
-- Documentação detalhada do contexto (repositórios, linguagens e período)
-- Discussão explícita de limitações e contexto de aplicabilidade
-- Sugestão de replicação em outros contextos para validar generalização
+   - **Mitigação**:
+     - Análise separada por linguagem para identificar padrões específicos
+     - Sugestão de replicação em outras linguagens para validar generalização
 
 ## 13.5 Resumo das principais ameaças e estratégias de mitigação
 
@@ -1316,9 +1326,9 @@ O piloto será considerado bem-sucedido se:
 | **Conclusão** | Baixo poder estatístico | Tamanho de amostra planejado (5.000 PRs) para poder ≥ 0,8 e análise de poder a posteriori |
 | **Conclusão** | Violação de suposições estatísticas | Verificação de suposições e uso de testes não paramétricos quando necessário |
 | **Conclusão** | Erros de medida (SonarQube, API) | Validação cruzada, verificação de completude e análise de sensibilidade |
-| **Interna** | Seleção (diferenças entre grupos) | Balanceamento por linguagem, tamanho, período e controle estatístico |
+| **Interna** | Seleção | Balanceamento por linguagem, tamanho, período e controle estatístico |
+| **Interna** | Histórico | Distribuição temporal, análise de tendências e controle por período |
 | **Interna** | Variáveis de confusão | Controle por variáveis conhecidas (linguagem, tempo e interações) em regressão |
-| **Interna** | Histórico (eventos externos) | Distribuição temporal, análise de tendências e controle por período |
 | **Constructo** | Quantidade vs. qualidade de *code reviews* | Definição clara, documentação de limitações e análises complementares |
 | **Constructo** | SonarQube não detecta tudo | Uso de ferramenta estabelecida, foco em vulnerabilidades detectadas e análise por severidade |
 | **Externa** | Limitação a repositórios públicos do GitHub | Documentação explícita do contexto e discussão de limitações |

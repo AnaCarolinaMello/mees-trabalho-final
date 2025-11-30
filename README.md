@@ -1249,13 +1249,7 @@ flowchart TD
      - Tamanho de amostra planejado (5.000 PRs) calculado para poder ≥ 0,8
      - Critério de sucesso: poder estatístico ≥ 0,8
 
-2. **Violação de suposições estatísticas**:
-   - **Ameaça**: Suposições dos testes estatísticos podem não ser atendidas, comprometendo validade dos resultados
-   - **Mitigação**:
-     - Verificação de suposições (normalidade, homocedasticidade, independência)
-     - Uso de testes não paramétricos quando necessário
-
-3. **Erros de medida (SonarQube, API)**:
+2. **Erros de medida (SonarQube, API)**:
    - **Ameaça**: SonarQube pode ter falsos positivos/negativos e API do GitHub pode ter dados incompletos
    - **Mitigação**:
      - Verificar consistência dos dados SonarQube em amostra piloto
@@ -1267,7 +1261,7 @@ flowchart TD
 **Ameaças identificadas:**
 
 1. **Seleção**:
-   - **Ameaça**: Diferenças sistemáticas entre grupos (com vs. sem *code reviews*) podem explicar resultados, não os *code reviews* em si
+   - **Ameaça**: Diferenças pré-existentes entre os grupos (com vs. sem *code reviews*) podem influenciar os resultados
    - **Mitigação**:
      - Balanceamento por linguagem, tamanho de repositório e período temporal
      - Análise de características dos grupos para verificar comparabilidade
@@ -1278,12 +1272,6 @@ flowchart TD
      - Distribuição de *pull requests* ao longo de diferentes períodos temporais
      - Análise de tendências temporais para identificar possíveis efeitos de histórico
      - Controle por período temporal nas análises
-
-3. **Variáveis de confusão**:
-   - **Ameaça**: Fatores como experiência do desenvolvedor, complexidade do código e tamanho do PR podem confundir resultados
-   - **Mitigação**:
-     - Controle estatístico por variáveis conhecidas (linguagem, tempo até *merge* e interações)
-     - Balanceamento por tamanho/complexidade quando possível
 
 ## 13.3 Validade de constructo
 
@@ -1324,11 +1312,9 @@ flowchart TD
 | Tipo de Validade | Ameaça Principal | Estratégia de Mitigação |
 |------------------|------------------|------------------------|
 | **Conclusão** | Baixo poder estatístico | Tamanho de amostra planejado (5.000 PRs) para poder ≥ 0,8 e análise de poder a posteriori |
-| **Conclusão** | Violação de suposições estatísticas | Verificação de suposições e uso de testes não paramétricos quando necessário |
 | **Conclusão** | Erros de medida (SonarQube, API) | Validação cruzada, verificação de completude e análise de sensibilidade |
 | **Interna** | Seleção | Balanceamento por linguagem, tamanho, período e controle estatístico |
 | **Interna** | Histórico | Distribuição temporal, análise de tendências e controle por período |
-| **Interna** | Variáveis de confusão | Controle por variáveis conhecidas (linguagem, tempo e interações) em regressão |
 | **Constructo** | Quantidade vs. qualidade de *code reviews* | Definição clara, documentação de limitações e análises complementares |
 | **Constructo** | SonarQube não detecta tudo | Uso de ferramenta estabelecida, foco em vulnerabilidades detectadas e análise por severidade |
 | **Externa** | Limitação a repositórios públicos do GitHub | Documentação explícita do contexto e discussão de limitações |

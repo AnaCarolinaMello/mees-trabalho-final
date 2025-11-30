@@ -1160,17 +1160,17 @@ flowchart TD
     F8_3 --> Analise[Análise Estatística<br/>Instrumento: Testes estatísticos<br/>Métricas: Testes t, ANOVA,<br/>Correlações, Regressão]
     Analise --> End([Fim do Experimento])
     
-    style Start fill:#e1f5ff
-    style End fill:#e1f5ff
-    style Fase1 fill:#fff4e1
-    style Fase2 fill:#fff4e1
-    style Fase3 fill:#fff4e1
-    style Fase4 fill:#fff4e1
-    style Fase5 fill:#fff4e1
-    style Fase6 fill:#fff4e1
-    style Fase7 fill:#fff4e1
-    style Fase8 fill:#fff4e1
-    style Analise fill:#e8f5e9
+    style Start fill:#e1f5ff,color:#333333
+    style End fill:#e1f5ff,color:#333333
+    style Fase1 fill:#fff4e1,color:#333333
+    style Fase2 fill:#fff4e1,color:#333333
+    style Fase3 fill:#fff4e1,color:#333333
+    style Fase4 fill:#fff4e1,color:#333333
+    style Fase5 fill:#fff4e1,color:#333333
+    style Fase6 fill:#fff4e1,color:#333333
+    style Fase7 fill:#fff4e1,color:#333333
+    style Fase8 fill:#fff4e1,color:#333333
+    style Analise fill:#e8f5e9,color:#333333
 ```
 
 **Legenda do fluxograma:**

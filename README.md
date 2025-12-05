@@ -257,15 +257,66 @@ O estudo é acadêmico, conduzido apenas por uma pessoa. Os objetos de análise 
 
 ## 5.1 Stakeholders principais
 
-Liste os grupos ou papéis que têm interesse ou serão impactados pelo experimento (por exemplo, devs, QA, produto, gestores, clientes internos).
+**Pesquisadora:**
+- Responsável pela execução completa do experimento, desde a coleta de dados até a análise e interpretação dos resultados.
+
+**Comunidade acadêmica:**
+- Professores e orientadores interessados na validação do método experimental e na qualidade dos resultados obtidos.
+
+**Comunidade de pesquisa em Engenharia de Software:**
+- Pesquisadores que podem se beneficiar dos resultados empíricos sobre o impacto de *code reviews* na qualidade de código.
+
+**Desenvolvedores e equipes de software:**
+- Profissionais que podem utilizar as evidências geradas para fundamentar decisões sobre adoção ou intensificação de práticas de *code review* em seus projetos.
+
+**Organizações de desenvolvimento de software:**
+- Empresas e equipes que buscam evidências empíricas para justificar investimentos em processos de revisão de código.
 
 ## 5.2 Interesses e expectativas dos stakeholders
 
-Descreva o que cada grupo espera obter do experimento (insights, evidências, validação de decisão, mitigação de risco, etc.).
+**Pesquisadora:**
+- Obter evidências empíricas robustas sobre a relação entre code reviews e redução de vulnerabilidades/*code smells*.
+- Completar o trabalho final do curso com resultados válidos e relevantes para a área.
+- Desenvolver competências em pesquisa empírica, análise de dados e experimentação em engenharia de software.
+
+**Comunidade acadêmica:**
+- Validar a aplicação adequada de métodos experimentais em engenharia de software.
+- Contribuir para o corpo de conhecimento sobre práticas de desenvolvimento de software.
+- Garantir rigor metodológico e reprodutibilidade do estudo.
+
+**Comunidade de pesquisa:**
+- Acesso a dados empíricos sobre *code reviews*.
+- *Insights* sobre variações do impacto entre diferentes linguagens de programação.
+- Evidências que possam ser replicadas ou estendidas em estudos futuros.
+
+**Desenvolvedores e equipes:**
+- Evidências quantitativas sobre a efetividade de *code reviews*.
+- *Insights* sobre quantidades ideais de revisões por *pull request*.
+- Dados comparativos entre diferentes linguagens de programação.
+
+**Organizações:**
+- Justificativa baseada em evidências para investir em processos de *code review*.
+- Métricas e *benchmarks* para avaliar a efetividade de suas próprias práticas de revisão.
 
 ## 5.3 Impactos potenciais no processo / produto
 
-Antecipe como a execução do experimento pode afetar prazos, qualidade, carga de trabalho ou o próprio produto durante e após o estudo.
+**Durante a execução do experimento:**
+
+- **Carga de trabalho da pesquisadora:** O experimento requer tempo significativo para coleta de dados (API do GitHub), execução de análises SonarQube e processamento de dados. A carga é gerenciável por ser um estudo individual, mas pode impactar prazos se houver problemas técnicos inesperados.
+
+- **Recursos computacionais:** A execução de análises SonarQube em 2.500 repositórios pode consumir recursos significativos da máquina local, potencialmente limitando outras atividades durante períodos de análise intensiva.
+
+- **Dependência de serviços externos:** O experimento depende da disponibilidade e estabilidade da API do GitHub e da capacidade de executar SonarQube, o que pode introduzir atrasos se houver indisponibilidades ou limitações de taxa.
+
+**Após a conclusão do estudo:**
+
+- **Contribuição acadêmica:** Os resultados podem ser publicados ou apresentados, contribuindo para o conhecimento na área de engenharia de software e práticas de desenvolvimento.
+
+- **Impacto na prática:** Evidências geradas podem influenciar decisões de equipes e organizações sobre adoção ou intensificação de *code reviews*, potencialmente melhorando a qualidade de software em projetos que adotarem as práticas recomendadas.
+
+- **Reprodutibilidade:** O método e os scripts desenvolvidos podem ser reutilizados por outros pesquisadores para estudos similares ou extensões do trabalho.
+
+- **Limitações de impacto direto:** Por ser um estudo observacional em repositórios públicos, não há impacto direto nos projetos analisados, pois não há interação com as equipes desses projetos. O impacto é indireto, através da disseminação de conhecimento e evidências.
 
 # 6. Riscos de alto nível, premissas e critérios de sucesso
 

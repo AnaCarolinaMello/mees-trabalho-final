@@ -2,7 +2,7 @@
 
 ## 1.1 Título do experimento
 
-Investigar o impacto de *code reviews* na redução de vulnerabilidades e *code smells* em diferentes linguagens em repositórios *open-source* em diferentes linguagens em repositórios *open-source*
+Investigar o impacto de *code reviews* na redução de vulnerabilidades e *code smells* em diferentes linguagens em repositórios *open-source*
 
 ## 1.2 ID / código
 
